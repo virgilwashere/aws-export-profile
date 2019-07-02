@@ -1,18 +1,21 @@
 # aws-export-profile
 
-`aws-export-profile` is a bash script that will output AWS export statements of your chosen aws boto profile. In case you have to manage multiple AWS accounts that rely on different boto profiles, you can *activate* a chosen profile by making it available in your shell environment.
+`aws-export-profile` is a bash script that will output AWS export statements of your chosen aws boto profile. In case you have to manage multiple AWS accounts that rely on different boto profiles, you can **_activate_** a chosen profile by making it available in your shell environment.
 
-This tool reads credentials from `~/.aws/credentials`. If you are looking for a way to export boto profiles via `aws sts assume-role` instead, have a lookt at **[aws-export-assume-profile](https://github.com/cytopia/aws-export-assume-profile)**.
+This tool reads credentials from `~/.aws/credentials`. If you are looking for a way to export boto profiles via `aws sts assume-role` instead, have a look at **[aws-export-assume-profile](https://github.com/cytopia/aws-export-assume-profile)**.
 
 [![Build Status](https://travis-ci.org/cytopia/aws-export-profile.svg?branch=master)](https://travis-ci.org/cytopia/aws-export-profile)
 ![Release](https://img.shields.io/github/release/cytopia/aws-export-profile.svg)
 
-**Note:** Wrap the command in **`$(aws-export-profile)`** to actually export your boto environment variables.
+> [!NOTE]
+> Wrap the command in **`$(aws-export-profile)`** to actually export your boto environment variables.
 
-
+<!-- markdownlint-disable MD026 -->
 ## But why?
+<!-- markdownlint-enable MD026 -->
 
 Most AWS related tools support boto profiles out of the box, such as the `aws-cli` (Example: `aws ec2 --profile <BOTO_PROFILE`). However sometimes it is required to have your chosen boto profile available as shell variables. One of the use cases is when you use Docker and want a specific boto login available inside your container.:
+
 ```bash
 # Export staging boto profile
 user> $(aws-export-profile staging)
@@ -24,7 +27,6 @@ user> docker run --rm -it \
   --env AWS_REGION=$AWS_REGION \
   my-aws-docker
 ```
-
 
 ## Available exports
 
@@ -41,8 +43,7 @@ The following export variables are currently supported.
 | `AWS_SECURITY_TOKEN`   | Secret token |
 | `AWS_REGION`           | Region|
 
-
-## Examples
+### Examples
 
 This tool simply output the exports to stdout. In order to auto-source them, wrap the command in **`$(...)`**.
 
@@ -71,6 +72,7 @@ export AWS_REGION="eu-central-1"
 ```
 
 #### Boto profile `production` with more exports
+
 ```bash
 user> aws-export-profile production
 
@@ -84,11 +86,12 @@ export AWS_REGION="eu-central-1"
 ```
 
 #### Export boto profile `production`
+
 ```bash
 user> $(aws-export-profile production)
 
 # Validate
-user> env | grep AWS_
+user> printenv | grep AWS_
 
 AWS_ACCESS_KEY_ID="XXXXXXXXXXXXXXXXXXXX"
 AWS_ACCESS_KEY="XXXXXXXXXXXXXXXXXXXX"
@@ -100,18 +103,18 @@ AWS_REGION="eu-central-1"
 ```
 
 #### Unset all AWS_ variables
+
 ```bash
 user> $(aws-export-profile -u)
 ```
-
 
 ## Usage
 
 ```bash
 Usage: aws-export-profile [profile] [credentials] [config]
        aws-export-profile --unset, -u
-       aws-export-profile --help|-h
-       aws-export-profile --version|-v
+       aws-export-profile --help,  -h
+       aws-export-profile --version, -v
 
 This bash helper will output AWS export statements of your chosen aws boto profile.
 Wrap this script in $(aws-export-profile) to export those environment variables.
@@ -126,7 +129,7 @@ Optional parameter:
 
 Arguments:
     --unset, -u    Unset currently set AWS variables from env
-    --help, -h     Show this help screen
+    --help,  -h    Show this help screen
     --version, -v  Show version
 
 Available exports:
@@ -148,7 +151,7 @@ Examples to export:
     $(aws-export-profile production /jenkins/aws/credentials /jenkins/aws/config)
 
 Examples to unset all AWS variables
-    \$(aws-export-profile -u)
+    $(aws-export-profile -u)
 ```
 
 ## License

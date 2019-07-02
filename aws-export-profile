@@ -36,7 +36,7 @@ EOF
 			cat << EOF
 Usage: aws-export-profile [profile] [credentials] [config]
        aws-export-profile --unset, -u
-       aws-export-profile --help, -h
+       aws-export-profile --help,  -h
        aws-export-profile --version, -v
 
 This bash helper will output AWS export statements of your chosen aws boto profile.
@@ -52,7 +52,7 @@ Optional parameter:
 
 Arguments:
     --unset, -u    Unset currently set AWS variables from env
-    --help, -h     Show this help screen
+    --help,  -h    Show this help screen
     --version, -v  Show version
 
 
