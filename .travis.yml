@@ -1,9 +1,36 @@
-language: sh
+os: linux
+dist: trusty
+language: bash
 
-before_script:
-  - sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ trusty-backports restricted main universe"
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq shellcheck
+env:
+  global:
+    # or "v0.4.7", or "stable"
+    - SCVERSION="latest"
+
+addons:
+  apt:
+    update: true
+    packages:
+      - xz-utils
+
+before_install:
+  - |
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sctmp="$( mktemp -d -p ${TMPDIR:-/tmp} shellcheck.XXXXX)"
+      pushd "${sctmp}" > /dev/null
+      curl -k -sSLO "https://storage.googleapis.com/shellcheck/shellcheck-${SCVERSION?}.linux.x86_64.tar.xz"
+      curl -k -sSLO "https://storage.googleapis.com/shellcheck/shellcheck-${SCVERSION?}.linux.x86_64.tar.xz.sha512sum"
+      if sha512sum -c --quiet "shellcheck-${SCVERSION?}.linux.x86_64.tar.xz.sha512sum"; then
+        tar -x --xz -f "shellcheck-${SCVERSION?}.linux.x86_64.tar.xz"
+        sudo install -v -m0755 "${sctmp}/shellcheck-${SCVERSION}/shellcheck" "$( command -v shellcheck)"
+        grep 'binary was compiled' "${sctmp}/shellcheck-${SCVERSION}/README.txt"
+        shellcheck --help
+      fi
+      popd > /dev/null
+    fi
+
+git:
+  depth: 3
 
 script:
   - shellcheck --shell=bash aws-export-profile
